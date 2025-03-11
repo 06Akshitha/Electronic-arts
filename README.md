@@ -1,132 +1,45 @@
 # Electronic-arts
-#include <iostream>
-#include <unordered_map>
-#include <string>
+# Inventory Management System
+This is a simple **Inventory Management System** implemented in C++. It allows users to:
+Add items** to the inventory.
+Sell items** and update stock.
+List all available items** in the inventory.
 
-class Item {
-private:
-    std::string name;
-    int quantity;
-    float price;
+The program follows a **menu-based system**, making it easy for users to interact with and manage their inventory.
 
-public:
-    Item(std::string name, int quantity, float price)
-        : name(std::move(name)), quantity(quantity), price(price) {}
+Features
 
-    std::string get_name() const { return name; }
-    int get_quantity() const { return quantity; }
-    float get_price() const { return price; }
+User-Friendly Interface
+- A menu-driven approach for easy navigation.
+- Intuitive prompts guide users through actions.
 
-    void set_quantity(int new_quantity) { quantity = new_quantity; }
+ Object-Oriented Programming (OOP) Design
+- **Encapsulation**: Uses `Item` and `Inventory` classes to keep the code organized.
+- **Modular Structure**: Separation of concerns makes it easy to maintain and expand.
 
-    bool is_match(const std::string& other) { return name == other; }
-};
+Efficient Data Management
+- Uses **`std::unordered_map<std::string, Item>`** for quick item lookups (**O(1) complexity**).
+- Avoids memory leaks by using standard C++ containers instead of raw pointers.
 
-class Inventory {
-private:
-    std::unordered_map<std::string, Item> items;
-    float total_money = 0;
+ Smart Inventory Updates
+- If an item is **already in inventory**, it **updates the quantity** instead of creating duplicates.
+- Automatically **removes items** when their quantity reaches zero.
 
-public:
-    void add_item() {
-        std::string name;
-        int quantity;
-        float price;
+Basic Error Handling
+- Ensures that users **cannot sell more than the available stock**.
+- Provides warnings when trying to sell non-existent items.
 
-        std::cin.ignore();
-        std::cout << "\nEnter item name: ";
-        std::cin >> name;
-        std::cout << "Enter quantity: ";
-        std::cin >> quantity;
-        std::cout << "Enter price: ";
-        std::cin >> price;
+Installation & Usage
 
-        if (items.find(name) != items.end()) {
-            items[name].set_quantity(items[name].get_quantity() + quantity);
-        } else {
-            items[name] = Item(name, quantity, price);
-        }
-    }
+Requirements
+- C++ Compiler (GCC, Clang, MSVC, etc.)
+- Any IDE or terminal to run the program
 
-    void sell_item() {
-        std::string item_to_check;
-        std::cin.ignore();
-        std::cout << "\nEnter item name: ";
-        std::cin >> item_to_check;
 
-        if (items.find(item_to_check) == items.end()) {
-            std::cout << "\nThis item is not in your Inventory";
-            return;
-        }
+Future Improvements
+1.Enhanced Input Validation** – Improve error handling for invalid inputs.  
+2.Save & Load Inventory** – Implement file I/O to persist data between runs.  
+3.Better User Experience (UX)** – Show available stock before selling, display total earnings, and more.  
 
-        int input_quantity;
-        std::cout << "\nEnter number of items to sell: ";
-        std::cin >> input_quantity;
-
-        Item& item = items[item_to_check];
-        if (input_quantity <= item.get_quantity()) {
-            float money_earned = item.get_price() * input_quantity;
-            item.set_quantity(item.get_quantity() - input_quantity);
-            total_money += money_earned;
-
-            std::cout << "\nItems sold";
-            std::cout << "\nMoney received: " << money_earned;
-
-            if (item.get_quantity() == 0) {
-                items.erase(item_to_check);
-            }
-        } else {
-            std::cout << "\nCannot sell more items than you have.";
-        }
-    }
-
-    void list_items() {
-        if (items.empty()) {
-            std::cout << "\nInventory empty.";
-            return;
-        }
-
-        for (const auto& [key, item] : items) {
-            std::cout << "\nItem name: " << item.get_name();
-            std::cout << "\nQuantity: " << item.get_quantity();
-            std::cout << "\nPrice: " << item.get_price();
-            std::cout << "\n";
-        }
-    }
-};
-
-// no need to modify anything here
-int main() {
-    int choice;
-    Inventory inventory_system;
-    std::cout << "Welcome to the inventory!";
-
-    while (1) {
-        std::cout << "\n\nMENU\n"
-                  << "1. Add new item\n"
-                  << "2. Sell item\n"
-                  << "3. List items\n"
-                  << "4. Exit\n\n"
-                  << "Enter your choice: ";
-        std::cin >> choice;
-
-        switch (choice) {
-            case 1:
-                inventory_system.add_item();
-                break;
-            case 2:
-                inventory_system.sell_item();
-                break;
-            case 3:
-                inventory_system.list_items();
-                break;
-            case 4:
-                exit(0);
-            default:
-                std::cout << "\nInvalid choice entered";
-                std::cin.clear();
-                std::cin.ignore(INT_MAX, '\n');
-                break;
-        }
-    }
-}
+Conclusion
+This Inventory Management System is a great example of **object-oriented programming** and **efficient data handling** in C++. It ensures clean memory usage and quick inventory lookups while maintaining a simple and user-friendly design.
